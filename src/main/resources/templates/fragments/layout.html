@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!-- Общие элементы страниц. Разметка перенесена из исходного ndex.html без изменений дизайна. -->
+    <title>Фрагменты</title>
+</head>
+<body>
+
+<!-- ===== HEAD: шрифты и стили ===== -->
+<th:block th:fragment="head">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/style.css}" href="../static/style.css">
+</th:block>
+
+<!-- ===== НАВИГАЦИЯ ===== -->
+<header class="header" th:fragment="header">
+    <div class="header__container">
+        <a th:href="@{/}" href="/" class="header__logo">
+            <span class="logo-kinopoisk">Кинопоиск</span>
+        </a>
+
+        <nav class="header__nav">
+            <a th:href="@{/}" href="/" class="nav-link nav-link--active">Главная</a>
+            <a href="#" class="nav-link">Фильмы</a>
+            <a href="#" class="nav-link">Сериалы</a>
+            <a href="#" class="nav-link">Мультфильмы</a>
+            <a href="#" class="nav-link">Аниме</a>
+        </nav>
+
+        <div class="header__search">
+            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" class="search-input" placeholder="Фильмы, сериалы, персоны...">
+        </div>
+
+        <div class="header__actions">
+            <button class="btn-bookmark-header" title="Закладки">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            </button>
+            <button class="btn-profile" title="Профиль">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </button>
+        </div>
+
+        <button class="burger" id="burgerBtn">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</header>
+
+<!-- ===== МОБИЛЬНОЕ МЕНЮ ===== -->
+<div class="mobile-menu" id="mobileMenu" th:fragment="mobileMenu">
+    <div class="mobile-menu__content">
+        <a th:href="@{/}" href="/" class="mobile-link mobile-link--active">Главная</a>
+        <a href="#" class="mobile-link">Фильмы</a>
+        <a href="#" class="mobile-link">Сериалы</a>
+        <a href="#" class="mobile-link">Мультфильмы</a>
+        <a href="#" class="mobile-link">Аниме</a>
+        <div class="mobile-menu__divider"></div>
+        <a href="#" class="mobile-link">Закладки</a>
+        <a href="#" class="mobile-link">Профиль</a>
+    </div>
+</div>
+
+<!-- ===== ФУТЕР ===== -->
+<footer class="footer" th:fragment="footer">
+    <div class="container">
+        <div class="footer__grid">
+            <div class="footer__col">
+                <span class="footer__logo">Кинопоиск</span>
+                <p class="footer__desc">Самый крупный портал о кино в рунете. Рейтинги, отзывы, рецензии и трейлеры.</p>
+            </div>
+            <div class="footer__col">
+                <h4 class="footer__heading">Разделы</h4>
+                <a href="#" class="footer__link">Фильмы</a>
+                <a href="#" class="footer__link">Сериалы</a>
+                <a href="#" class="footer__link">Мультфильмы</a>
+                <a href="#" class="footer__link">ТВ-шоу</a>
+            </div>
+            <div class="footer__col">
+                <h4 class="footer__heading">Сообщество</h4>
+                <a href="#" class="footer__link">Рейтинги</a>
+                <a href="#" class="footer__link">Обсуждения</a>
+                <a href="#" class="footer__link">Рецензии</a>
+                <a href="#" class="footer__link">Трейлеры</a>
+            </div>
+            <div class="footer__col">
+                <h4 class="footer__heading">Поддержка</h4>
+                <a href="#" class="footer__link">Помощь</a>
+                <a href="#" class="footer__link">Обратная связь</a>
+                <a th:href="@{/api/movies}" href="/api/movies" class="footer__link">API</a>
+                <a href="#" class="footer__link">Вакансии</a>
+            </div>
+        </div>
+        <div class="footer__bottom">
+            <span>© 2025 Кинопоиск. Все права защищены.</span>
+        </div>
+    </div>
+</footer>
+
+<!-- ===== ТОСТ-УВЕДОМЛЕНИЕ + СКРИПТ ===== -->
+<th:block th:fragment="toastAndScript">
+    <div class="toast" id="toast">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <span id="toastText">Добавлено в «Смотреть позже»</span>
+    </div>
+    <script th:src="@{/script.js}" src="../static/script.js"></script>
+</th:block>
+
+<!-- ===== КАРТОЧКА ФИЛЬМА (используется в сетке, в горизонтальном скролле и в блоке похожих) ===== -->
+<!-- Параметры: movie — фильм; horizontal — true для горизонтального скролла; bookmark — показывать ли кнопку закладки -->
+<div th:fragment="movieCard(movie, horizontal, bookmark)"
+     class="movie-card" th:classappend="${horizontal} ? 'movie-card--horizontal'"
+     th:attr="data-href=@{/movies/{id}(id=${movie.id})},data-id=${movie.id}">
+    <div class="movie-card__poster">
+        <a th:href="@{/movies/{id}(id=${movie.id})}" class="movie-card__link" tabindex="-1">
+            <img th:src="${movie.posterUrl}" th:alt="${movie.title}" loading="lazy">
+        </a>
+        <div class="movie-card__rating" th:classappend="${movie.highRating} ? 'rating--high'">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <span th:text="${movie.ratingText}">8.2</span>
+        </div>
+        <button class="movie-card__bookmark" th:if="${bookmark}" th:attr="data-id=${movie.id}" title="В закладки">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        </button>
+    </div>
+    <div class="movie-card__info">
+        <h3 class="movie-card__title">
+            <a th:href="@{/movies/{id}(id=${movie.id})}" th:text="${movie.title}">Название фильма</a>
+        </h3>
+        <span class="movie-card__meta" th:text="${movie.year} + ' • ' + ${movie.mainGenre}">2024 • Фантастика</span>
+    </div>
+</div>
+
+</body>
+</html>

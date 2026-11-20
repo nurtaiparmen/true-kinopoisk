@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${movie.title} + ' — Кинопоиск'">Фильм — Кинопоиск</title>
+    <th:block th:replace="~{fragments/layout :: head}"></th:block>
+</head>
+<body>
+
+    <!-- ===== НАВИГАЦИЯ ===== -->
+    <header th:replace="~{fragments/layout :: header}"></header>
+
+    <!-- ===== МОБИЛЬНОЕ МЕНЮ ===== -->
+    <div th:replace="~{fragments/layout :: mobileMenu}"></div>
+
+    <main>
+        <!-- ===== СТРАНИЦА ФИЛЬМА (оформление повторяет блок героя главной страницы) ===== -->
+        <section class="movie-page" th:attr="data-id=${movie.id}">
+            <div class="movie-page__bg">
+                <img th:src="${movie.posterUrl}" th:alt="${movie.title}" class="movie-page__bg-img">
+                <div class="movie-page__overlay"></div>
+            </div>
+
+            <div class="container movie-page__content">
+                <a th:href="@{/}" class="btn-back">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                    На главную
+                </a>
+
+                <div class="movie-page__layout">
+                    <!-- Большой постер -->
+                    <div class="movie-page__poster">
+                        <img th:src="${movie.posterUrl}" th:alt="${movie.title}">
+                    </div>
+
+                    <!-- Информация -->
+                    <div class="movie-page__info">
+                        <div class="hero__rating">
+                            <span class="rating-badge">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                <span th:text="${movie.ratingText}">8.2</span>
+                            </span>
+                            <span class="rating-count" th:text="${movie.ratingCountText} + ' оценок'">118 540 оценок</span>
+                        </div>
+
+                        <h1 class="hero__title movie-page__title" th:text="${movie.title}">Название фильма</h1>
+
+                        <div class="hero__meta">
+                            <span class="meta-year" th:text="${movie.year}">2024</span>
+                            <span class="meta-dot">•</span>
+                            <span class="meta-country" th:text="${movie.country}">США</span>
+                            <span class="meta-dot">•</span>
+                            <span class="meta-duration" th:text="${movie.durationText}">2ч 46мин</span>
+                            <span class="meta-dot">•</span>
+                            <span class="meta-age" th:text="${movie.ageRating}">12+</span>
+                        </div>
+
+                        <div class="hero__genres">
+                            <span class="genre-tag" th:each="genre : ${movie.genreList}" th:text="${genre}">Фантастика</span>
+                        </div>
+
+                        <p class="hero__description movie-page__description" th:text="${movie.description}">Описание фильма.</p>
+
+                        <dl class="movie-page__details">
+                            <div class="movie-page__detail">
+                                <dt>Режиссёр</dt>
+                                <dd th:text="${movie.director}">Дени Вильнёв</dd>
+                            </div>
+                            <div class="movie-page__detail">
+                                <dt>В главных ролях</dt>
+                                <dd>
+                                    <span class="movie-page__actor" th:each="actor, it : ${movie.castList}"
+                                          th:text="${actor} + (${it.last} ? '' : ', ')">Актёр</span>
+                                    <span th:if="${movie.castList.isEmpty()}">Нет данных</span>
+                                </dd>
+                            </div>
+                            <div class="movie-page__detail">
+                                <dt>Страна</dt>
+                                <dd th:text="${movie.country}">США</dd>
+                            </div>
+                            <div class="movie-page__detail">
+                                <dt>Год выпуска</dt>
+                                <dd th:text="${movie.year}">2024</dd>
+                            </div>
+                            <div class="movie-page__detail">
+                                <dt>Продолжительность</dt>
+                                <dd th:text="${movie.durationText}">2ч 46мин</dd>
+                            </div>
+                            <div class="movie-page__detail">
+                                <dt>Возраст</dt>
+                                <dd th:text="${movie.ageRating}">12+</dd>
+                            </div>
+                        </dl>
+
+                        <div class="hero__buttons">
+                            <button class="btn-watch" id="btnWatch">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                                Смотреть
+                            </button>
+                            <button class="btn-watch-later" th:attr="data-id=${movie.id}">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                                Смотреть позже
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== ПОХОЖИЕ ФИЛЬМЫ ===== -->
+        <section class="section-movies section-movies--alt" th:if="${!similar.isEmpty()}">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Похожие фильмы</h2>
+                </div>
+
+                <div class="movies-scroll" id="similarMoviesScroll">
+                    <th:block th:each="item : ${similar}">
+                        <div th:replace="~{fragments/layout :: movieCard(${item}, true, false)}"></div>
+                    </th:block>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ===== ФУТЕР ===== -->
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+
+    <!-- ===== ТОСТ-УВЕДОМЛЕНИЕ ===== -->
+    <th:block th:replace="~{fragments/layout :: toastAndScript}"></th:block>
+</body>
+</html>

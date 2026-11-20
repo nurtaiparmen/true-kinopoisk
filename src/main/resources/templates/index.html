@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Кинопоиск - Фильмы и сериалы</title>
+    <th:block th:replace="~{fragments/layout :: head}"></th:block>
+</head>
+<body>
+
+    <!-- ===== НАВИГАЦИЯ ===== -->
+    <header th:replace="~{fragments/layout :: header}"></header>
+
+    <!-- ===== МОБИЛЬНОЕ МЕНЮ ===== -->
+    <div th:replace="~{fragments/layout :: mobileMenu}"></div>
+
+    <main>
+        <!-- ===== ГЕРОЙ ===== -->
+        <section class="hero" th:if="${hero != null}" th:attr="data-id=${hero.id}">
+            <div class="hero__bg">
+                <img th:src="${hero.posterUrl}" src="../static/images/spiderman.jpg" th:alt="${hero.title}" alt="Человек-паук: Новый день" class="hero__bg-img">
+                <div class="hero__overlay"></div>
+            </div>
+
+            <div class="hero__content">
+                <div class="hero__info">
+                    <div class="hero__rating">
+                        <span class="rating-badge">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <span th:text="${hero.ratingText}">7.8</span>
+                        </span>
+                        <span class="rating-count" th:text="${hero.ratingCountText} + ' оценок'">42 318 оценок</span>
+                    </div>
+
+                    <h1 class="hero__title">
+                        <a th:href="@{/movies/{id}(id=${hero.id})}" th:text="${hero.title}">Человек-паук: Новый день</a>
+                    </h1>
+
+                    <div class="hero__meta">
+                        <span class="meta-year" th:text="${hero.year}">2025</span>
+                        <span class="meta-dot">•</span>
+                        <span class="meta-country" th:text="${hero.country}">США</span>
+                        <span class="meta-dot">•</span>
+                        <span class="meta-duration" th:text="${hero.durationText}">2ч 17мин</span>
+                        <span class="meta-dot">•</span>
+                        <span class="meta-age" th:text="${hero.ageRating}">12+</span>
+                    </div>
+
+                    <div class="hero__genres">
+                        <span class="genre-tag" th:each="genre : ${hero.genreList}" th:text="${genre}">Экшен</span>
+                    </div>
+
+                    <p class="hero__description" th:text="${hero.description}">
+                        Описание фильма.
+                    </p>
+
+                    <div class="hero__buttons">
+                        <a class="btn-watch" th:href="@{/movies/{id}(id=${hero.id})}">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                            Смотреть
+                        </a>
+                        <button class="btn-watch-later" th:attr="data-id=${hero.id}">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                            Смотреть позже
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== ЖАНРЫ (горизонтальная прокрутка) ===== -->
+        <section class="section-genres">
+            <div class="container">
+                <div class="genres-scroll" id="genresScroll">
+                    <button class="genre-pill genre-pill--active">Все</button>
+                    <button class="genre-pill">Экшен</button>
+                    <button class="genre-pill">Комедии</button>
+                    <button class="genre-pill">Драмы</button>
+                    <button class="genre-pill">Ужасы</button>
+                    <button class="genre-pill">Фантастика</button>
+                    <button class="genre-pill">Триллеры</button>
+                    <button class="genre-pill">Мелодрамы</button>
+                    <button class="genre-pill">Детективы</button>
+                    <button class="genre-pill">Аниме</button>
+                    <button class="genre-pill">Документальные</button>
+                    <button class="genre-pill">Семейные</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== ПОПУЛЯРНОЕ СЕЙЧАС ===== -->
+        <section class="section-movies">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Популярное сейчас</h2>
+                    <a href="#" class="section-link">
+                        Все
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                    </a>
+                </div>
+
+                <div class="movies-grid">
+                    <!-- Карточки формируются из базы данных -->
+                    <th:block th:each="movie : ${popular}">
+                        <div th:replace="~{fragments/layout :: movieCard(${movie}, false, true)}"></div>
+                    </th:block>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== НОВИНКИ КИНО ===== -->
+        <section class="section-movies section-movies--alt">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Новинки кино</h2>
+                    <a href="#" class="section-link">
+                        Все
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                    </a>
+                </div>
+
+                <div class="movies-scroll" id="newMoviesScroll">
+                    <th:block th:each="movie : ${newReleases}">
+                        <div th:replace="~{fragments/layout :: movieCard(${movie}, true, false)}"></div>
+                    </th:block>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== ТОП-250 ===== -->
+        <section class="section-movies">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Топ-250</h2>
+                    <a href="#" class="section-link">
+                        Все
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                    </a>
+                </div>
+
+                <div class="top-list">
+                    <a class="top-item" th:each="movie : ${top}" th:href="@{/movies/{id}(id=${movie.id})}">
+                        <span class="top-item__rank" th:text="${movie.topRank}">1</span>
+                        <div class="top-item__poster">
+                            <img th:src="${movie.posterUrl}" th:alt="${movie.title}" loading="lazy">
+                        </div>
+                        <div class="top-item__info">
+                            <h3 class="top-item__title" th:text="${movie.title}">Побег из Шоушенка</h3>
+                            <span class="top-item__meta" th:text="${movie.year} + ' • ' + ${movie.topGenreText}">1994 • Драма, криминал</span>
+                        </div>
+                        <span class="top-item__rating" th:classappend="${movie.highRating} ? 'rating--high'" th:text="${movie.ratingText}">9.2</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ===== ФУТЕР ===== -->
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+
+    <!-- ===== ТОСТ-УВЕДОМЛЕНИЕ ===== -->
+    <th:block th:replace="~{fragments/layout :: toastAndScript}"></th:block>
+</body>
+</html>
